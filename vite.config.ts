@@ -1,5 +1,5 @@
-import {defineConfig} from "vite";
+import { defineConfig } from "vite";
 
 export default defineConfig({
-    base:"/kws2100-exercise"
-})
+  base: "/kws2100-exercise",
+});
