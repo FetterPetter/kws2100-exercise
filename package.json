@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "husky": "^9.1.7",
     "vite": "^6.1.0"
   },
   "dependencies": {
