@@ -48,6 +48,7 @@ const map = new Map({
 export function Application() {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [municipalityName, setMunicipalityName] = useState<string | null>(null);
+  const [best, setBest] = useState(false);
   function handlePointerMove(event: MapBrowserEvent<MouseEvent>) {
     municipalityLayer
       .getSource()
@@ -67,6 +68,11 @@ export function Application() {
         setMunicipalityName(
           feature.getProperties()["name"] ?? "her er det ikke noe",
         );
+        if (municipalityName == "Bærum") {
+          setBest(true);
+        } else {
+          setBest(false);
+        }
       });
   }
 
@@ -78,7 +84,13 @@ export function Application() {
 
   return (
     <>
-      <h1>{municipalityName}</h1>
+      <div>
+        {best ? (
+          <h1 style={{ color: "gold" }}>{municipalityName}</h1>
+        ) : (
+          <h1 style={{ color: "red" }}>{municipalityName}</h1>
+        )}
+      </div>
       <div ref={mapRef}></div>
     </>
   );
