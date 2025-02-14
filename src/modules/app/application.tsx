@@ -25,7 +25,7 @@ const map = new Map({
     new TileLayer({ source: new OSM() }),
     new VectorLayer({
       source: new VectorSource({
-        url: "kws2100-exercise/public/geojson/kommuner.geojson",
+        url: "kws2100-exercise/geojson/kommuner.geojson",
         format: new GeoJSON(),
       }),
       style: new Style({
