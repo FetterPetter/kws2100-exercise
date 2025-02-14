@@ -16,26 +16,25 @@ import { Stroke, Style } from "ol/style";
 useGeographic();
 // Here we create a Map object. Make sure you `import { Map } from "ol"`. Otherwise, the standard Javascript
 //  map data structure will be used
+const osmLayer = new TileLayer({ source: new OSM() });
+const municipalityLayer = new VectorLayer({
+  source: new VectorSource({
+    url: "/kws2100-exercise/geojson/kommuner.geojson",
+    format: new GeoJSON(),
+  }),
+  style: new Style({
+    stroke: new Stroke({
+      color: "blue",
+      width: 2,
+    }),
+  }),
+});
 const map = new Map({
   // The map will be centered on a position in longitude (x-coordinate, east) and latitude (y-coordinate, north),
   //   with a certain zoom level
   view: new View({ center: [10.8, 59.9], zoom: 10 }),
   // map tile images will be from the Open Street Map (OSM) tile layer
-  layers: [
-    new TileLayer({ source: new OSM() }),
-    new VectorLayer({
-      source: new VectorSource({
-        url: "/kws2100-exercise/geojson/kommuner.geojson",
-        format: new GeoJSON(),
-      }),
-      style: new Style({
-        stroke: new Stroke({
-          color: "blue",
-          width: 2,
-        }),
-      }),
-    }),
-  ],
+  layers: [osmLayer, municipalityLayer],
 });
 
 // A functional React component
