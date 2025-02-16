@@ -9,8 +9,10 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
 import { Fill, Stroke, Style, Text } from "ol/style";
+import { set } from "ol/transform";
 
 useGeographic();
+
 const focusedStyle = () =>
   new Style({
     stroke: new Stroke({
@@ -49,33 +51,43 @@ export function Application() {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [municipalityName, setMunicipalityName] = useState<string | null>(null);
   const [best, setBest] = useState(false);
+  let layerOn = true;
   function handlePointerMove(event: MapBrowserEvent<MouseEvent>) {
-    municipalityLayer
-      .getSource()
-      ?.forEachFeature((feature) => feature.setStyle(unFocusedStyle()));
-    municipalityLayer
-      .getSource()
-      ?.getFeaturesAtCoordinate(event.coordinate)
-      .forEach((feature) => {
-        feature.setStyle(focusedStyle);
-      });
+    if (layerOn) {
+      municipalityLayer
+        .getSource()
+        ?.forEachFeature((feature) => feature.setStyle(unFocusedStyle()));
+      municipalityLayer
+        .getSource()
+        ?.getFeaturesAtCoordinate(event.coordinate)
+        .forEach((feature) => {
+          feature.setStyle(focusedStyle);
+        });
+    }
+  }
+  function handleLayerClick() {
+    if (layerOn) {
+      municipalityLayer.setVisible(false);
+      layerOn = false;
+    } else {
+      municipalityLayer.setVisible(true);
+      layerOn = true;
+    }
   }
   function handleClick(event: MapBrowserEvent<MouseEvent>) {
     municipalityLayer
       .getSource()
       ?.getFeaturesAtCoordinate(event.coordinate)
       .forEach((feature) => {
-        setMunicipalityName(
-          feature.getProperties()["name"] ?? "her er det ikke noe",
-        );
-        if (municipalityName == "Bærum") {
+        const name = feature.getProperties()["name"] ?? "her er det ikke noe";
+        setMunicipalityName(name);
+        if (name === "Bærum") {
           setBest(true);
         } else {
           setBest(false);
         }
       });
   }
-
   useEffect(() => {
     map.setTarget(mapRef.current!);
     map.on("pointermove", handlePointerMove);
@@ -86,10 +98,15 @@ export function Application() {
     <>
       <div>
         {best ? (
-          <h1 style={{ color: "gold" }}>{municipalityName}</h1>
+          <h1 style={{ color: "gold" }}>
+            Du har klikket på: {municipalityName}
+          </h1>
         ) : (
-          <h1 style={{ color: "red" }}>{municipalityName}</h1>
+          <h1 style={{ color: "black" }}>
+            Du har klikket på: {municipalityName}
+          </h1>
         )}
+        <button onClick={handleLayerClick}>Skru av/på kommuner</button>
       </div>
       <div ref={mapRef}></div>
     </>
