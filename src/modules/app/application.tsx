@@ -141,15 +141,20 @@ export function Application() {
   return (
     <>
       <div>
-        {best ? (
-          <h1 style={{ color: "gold" }}>
-            Det er {skoleTall} skoler i {municipalityName} kommune.
-          </h1>
+        {municipalityName ? (
+          best ? (
+            <h1 style={{ color: "gold" }}>
+              Det er {skoleTall} skoler i {municipalityName} kommune.
+            </h1>
+          ) : (
+            <h1 style={{ color: "black" }}>
+              Det er {skoleTall} skoler i {municipalityName} kommune.
+            </h1>
+          )
         ) : (
-          <h1 style={{ color: "black" }}>
-            Det er {skoleTall} skoler i {municipalityName} kommune.
-          </h1>
+          <h1>Klikk på en kommune!</h1>
         )}
+
         <button onClick={handleLayerClick}>Skru av/på kommuner</button>
 
         <div ref={mapRef}></div>
