@@ -16,9 +16,14 @@ useGeographic();
 const schoolStyle = () =>
   new Style({
     image: new CircleStyle({
-      radius: 6,
-      fill: new Fill({ color: "blue" }),
-      stroke: new Stroke({ color: "white", width: 2 }),
+      radius: 8,
+      fill: new Fill({
+        color: "rgb(70, 130, 180)",
+      }),
+      stroke: new Stroke({
+        color: "white",
+        width: 2,
+      }),
     }),
   });
 const unFocusedSchoolStyle = () =>
@@ -31,21 +36,20 @@ const focusedStyle = () =>
   new Style({
     stroke: new Stroke({
       width: 3,
-    }),
-    /* text: new Text(({
-        text: feature.getProperties().name,
-        fill: new Fill({color: "green"}),
-        stroke: new Stroke({color: "white", width:2})
-      })),*/
-    fill: new Fill({
       color: "gold",
+    }),
+    fill: new Fill({
+      color: "rgba(255, 215, 0, 0.3)",
     }),
   });
 const unFocusedStyle = () =>
   new Style({
     stroke: new Stroke({
-      width: 5,
+      width: 4,
       color: "crimson",
+    }),
+    fill: new Fill({
+      color: "rgba(255, 0, 0, 0.1)",
     }),
   });
 const osmLayer = new TileLayer({ source: new OSM() });
