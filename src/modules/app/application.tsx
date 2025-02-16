@@ -45,7 +45,7 @@ const focusedStyle = () =>
 const unFocusedStyle = () =>
   new Style({
     stroke: new Stroke({
-      width: 4,
+      width: 1,
       color: "crimson",
     }),
     fill: new Fill({
