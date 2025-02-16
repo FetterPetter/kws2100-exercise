@@ -64,7 +64,7 @@ const schoolLayer = new VectorLayer({
   style: unFocusedSchoolStyle,
 });
 const map = new Map({
-  view: new View({ center: [10.8, 59.9], zoom: 7 }),
+  view: new View({ center: [9.7, 59.9], zoom: 7.1 }),
   layers: [osmLayer, municipalityLayer, schoolLayer],
 });
 
@@ -139,26 +139,57 @@ export function Application() {
   }, []);
 
   return (
-    <>
-      <div>
-        {municipalityName ? (
-          best ? (
-            <h1 style={{ color: "gold" }}>
-              Det er {skoleTall} skoler i {municipalityName} kommune.
-            </h1>
-          ) : (
-            <h1 style={{ color: "black" }}>
-              Det er {skoleTall} skoler i {municipalityName} kommune.
-            </h1>
-          )
-        ) : (
-          <h1>Klikk på en kommune!</h1>
-        )}
-
-        <button onClick={handleLayerClick}>Skru av/på kommuner</button>
-
-        <div ref={mapRef}></div>
-      </div>
-    </>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        backgroundColor: "#faf3e0",
+        overflow: "hidden",
+      }}
+    >
+      <h1
+        style={{
+          color: best ? "gold" : "black",
+          fontSize: "24px",
+          fontWeight: "bold",
+          textAlign: "center",
+          padding: "10px",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
+          margin: "0",
+        }}
+      >
+        {municipalityName
+          ? `Det er ${skoleTall} skoler i ${municipalityName} kommune.`
+          : "Klikk på en kommune for å begynne!"}
+      </h1>
+      <button
+        onClick={handleLayerClick}
+        style={{
+          margin: "10px auto",
+          padding: "10px 15px",
+          fontSize: "16px",
+          cursor: "pointer",
+          borderRadius: "5px",
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          transition: "background 0.3s",
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0056b3")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#007bff")}
+      >
+        Skru av/på kommuner
+      </button>
+      <div
+        ref={mapRef}
+        style={{
+          width: "100%",
+          height: "calc(100vh - 100px)",
+          border: "2px solid #ddd",
+        }}
+      ></div>
+    </div>
   );
 }
