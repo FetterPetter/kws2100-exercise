@@ -59,6 +59,7 @@ const schoolLayer = new VectorLayer({
     url: "/kws2100-exercise/geojson/skoler.geojson",
     format: new GeoJSON(),
   }),
+  style: unFocusedSchoolStyle,
 });
 const map = new Map({
   view: new View({ center: [10.8, 59.9], zoom: 7 }),
@@ -115,6 +116,8 @@ export function Application() {
             ) {
               school.setStyle(schoolStyle);
               count++;
+            } else {
+              school.setStyle(unFocusedSchoolStyle);
             }
           }
         });
