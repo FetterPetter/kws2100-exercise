@@ -8,21 +8,33 @@ import "ol/ol.css";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
-import { Fill, Stroke, Style, Text } from "ol/style";
-import { set } from "ol/transform";
+import { Fill, Stroke, Style } from "ol/style";
+import { Point } from "ol/geom";
+import CircleStyle from "ol/style/Circle";
 
 useGeographic();
-
+const schoolStyle = new Style({
+  image: new CircleStyle({
+    radius: 6,
+    fill: new Fill({ color: "blue" }),
+    stroke: new Stroke({ color: "white", width: 2 }),
+  }),
+});
+const unFocusedSchoolStyle = new Style({
+  image: new CircleStyle({
+    radius: 0,
+  }),
+});
 const focusedStyle = () =>
   new Style({
     stroke: new Stroke({
       width: 3,
     }),
     /* text: new Text(({
-    text: feature.getProperties().name,
-    fill: new Fill({color: "green"}),
-    stroke: new Stroke({color: "white", width:2})
-  })),*/
+        text: feature.getProperties().name,
+        fill: new Fill({color: "green"}),
+        stroke: new Stroke({color: "white", width:2})
+      })),*/
     fill: new Fill({
       color: "gold",
     }),
@@ -57,10 +69,8 @@ export function Application() {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [municipalityName, setMunicipalityName] = useState<string | null>(null);
   const [best, setBest] = useState(false);
-  const [currentKommunenummer, setCurrentKommunenummer] = useState<
-    string | null
-  >(null);
-  //schoolLayer.setVisible(false);
+  const [skoleTall, setSkoleTall] = useState<number>(0);
+
   let layerOn = true;
   function handlePointerMove(event: MapBrowserEvent<MouseEvent>) {
     if (layerOn) {
@@ -90,9 +100,25 @@ export function Application() {
       ?.getFeaturesAtCoordinate(event.coordinate)
       .forEach((feature) => {
         const name = feature.getProperties()["name"] ?? "her er det ikke noe";
-        const kommunenummer = feature.getProperties()["kommunenummer"];
         setMunicipalityName(name);
-        setCurrentKommunenummer(kommunenummer);
+
+        const municipalityGeometry = feature.getGeometry();
+        if (!municipalityGeometry) return;
+        let count = 0;
+        schoolLayer.getSource()?.forEachFeature((school) => {
+          const schoolGeometry = school.getGeometry();
+          if (schoolGeometry instanceof Point) {
+            if (
+              municipalityGeometry.intersectsCoordinate(
+                schoolGeometry.getCoordinates(),
+              )
+            ) {
+              school.setStyle(schoolStyle);
+              count++;
+            }
+          }
+        });
+        setSkoleTall(count);
         if (name === "Bærum") {
           setBest(true);
         } else {
@@ -112,11 +138,11 @@ export function Application() {
       <div>
         {best ? (
           <h1 style={{ color: "gold" }}>
-            Du har klikket på: {municipalityName}
+            Det er {skoleTall} skoler i {municipalityName} kommune.
           </h1>
         ) : (
           <h1 style={{ color: "black" }}>
-            Du har klikket på: {municipalityName}
+            Det er {skoleTall} skoler i {municipalityName} kommune.
           </h1>
         )}
         <button onClick={handleLayerClick}>Skru av/på kommuner</button>
