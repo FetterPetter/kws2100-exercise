@@ -13,18 +13,20 @@ import { Point } from "ol/geom";
 import CircleStyle from "ol/style/Circle";
 
 useGeographic();
-const schoolStyle = new Style({
-  image: new CircleStyle({
-    radius: 6,
-    fill: new Fill({ color: "blue" }),
-    stroke: new Stroke({ color: "white", width: 2 }),
-  }),
-});
-const unFocusedSchoolStyle = new Style({
-  image: new CircleStyle({
-    radius: 0,
-  }),
-});
+const schoolStyle = () =>
+  new Style({
+    image: new CircleStyle({
+      radius: 6,
+      fill: new Fill({ color: "blue" }),
+      stroke: new Stroke({ color: "white", width: 2 }),
+    }),
+  });
+const unFocusedSchoolStyle = () =>
+  new Style({
+    image: new CircleStyle({
+      radius: 0,
+    }),
+  });
 const focusedStyle = () =>
   new Style({
     stroke: new Stroke({
